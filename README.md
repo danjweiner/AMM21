@@ -1,5 +1,5 @@
-# AMM21
-`AMM` is a command-line tool to run the Abstract Mediation Model on your own device (Weiner et al 2021, biorxiv).
+# AMM
+`AMM` is a command-line tool to run the Abstract Mediation Model. For details on the method and application, please see Weiner et al 2021, biorxiv. Please cite that manuscript if you use this command-line tool in your own work.
 
 ## Overview
 
@@ -17,4 +17,4 @@ You'll need to download this repository to access AMM.py, which contains the fun
 ```  
 git clone https://github.com/danjweiner/AMM21.git
 ```
-
+The repository contains the Conda environment file (amm.yml) for running `AMM`. Note that this environment includes Python 2.7, which is required by the `AMM` dependency [LD Score Regression](https://github.com/bulik/ldsc). On that note, you will need to download `LDSC` to run `AMM`, which you can do at the previous link.
