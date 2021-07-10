@@ -18,3 +18,5 @@ You'll need to download this repository to access AMM.py, which contains the fun
 git clone https://github.com/danjweiner/AMM21.git
 ```
 The repository contains the Conda environment file (amm.yml) for running `AMM`. Note that this environment includes Python 2.7, which is required by the `AMM` dependency [LD Score Regression](https://github.com/bulik/ldsc). On that note, you will need to download `LDSC` to run `AMM`, which you can do at the previous link.
+
+
