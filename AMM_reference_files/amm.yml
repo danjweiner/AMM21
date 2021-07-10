@@ -1,0 +1,57 @@
+name: amm
+channels:
+  - bioconda
+  - r
+  - defaults
+  - conda-forge
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - _openmp_mutex=4.5=1_gnu
+  - bedtools=2.30.0=h7d7f7ad_1
+  - bitarray=0.8.3=py27h14c3975_0
+  - blas=1.0=mkl
+  - bzip2=1.0.8=h7b6447c_0
+  - ca-certificates=2021.5.25=h06a4308_1
+  - certifi=2020.6.20=pyhd3eb1b0_3
+  - curl=7.71.1=hbc83047_1
+  - future=0.18.2=py27_0
+  - intel-openmp=2021.2.0=h06a4308_610
+  - krb5=1.18.2=h173b8e3_0
+  - libblas=3.9.0=1_h6e990d7_netlib
+  - libcblas=3.9.0=3_h893e4fe_netlib
+  - libcurl=7.71.1=h20c2e04_1
+  - libdeflate=1.0=h14c3975_1
+  - libedit=3.1.20210216=h27cfd23_1
+  - libffi=3.3=he6710b0_2
+  - libgcc-ng=9.3.0=h5101ec6_17
+  - libgfortran-ng=7.5.0=ha8ba4b0_17
+  - libgfortran4=7.5.0=ha8ba4b0_17
+  - libgomp=9.3.0=h5101ec6_17
+  - libssh2=1.9.0=h1ba5d50_1
+  - libstdcxx-ng=9.3.0=hd4cf53a_17
+  - mkl=2020.2=256
+  - mkl-service=2.3.0=py27he904b0f_0
+  - mkl_fft=1.0.15=py27ha843d7b_0
+  - mkl_random=1.1.0=py27hd6b4f25_0
+  - ncurses=6.2=he6710b0_1
+  - nose=1.3.7=py27_2
+  - openssl=1.1.1k=h27cfd23_0
+  - pip=19.3.1=py27_0
+  - pybedtools=0.7.10=py27ha92aebf_3
+  - pysam=0.15.3=py27hda2845c_1
+  - python=2.7.18=ha1903f6_2
+  - python-dateutil=2.8.1=pyhd3eb1b0_0
+  - pytz=2021.1=pyhd3eb1b0_0
+  - readline=8.1=h27cfd23_0
+  - setuptools=44.0.0=py27_0
+  - six=1.16.0=pyhd3eb1b0_0
+  - sqlite=3.36.0=hc218d9a_0
+  - tk=8.6.10=hbc83047_0
+  - wheel=0.36.2=pyhd3eb1b0_0
+  - xz=5.2.5=h7b6447c_0
+  - zlib=1.2.11=h7b6447c_3
+  - pip:
+    - numpy==1.16.0
+    - pandas==0.20.0
+    - scipy==0.18.0
+prefix: /home/unix/dweiner/miniconda3/envs/amm
