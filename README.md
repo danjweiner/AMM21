@@ -13,7 +13,7 @@ What you need to provide for estimation:
 
 ## Getting started
 
-You'll need to download this repository to access AMM.py, which contains the functions to run AMM. To download this repository, run:
+You'll need to download this repository to access AMM.py, which contains the functions to run `AMM`. To download this repository, run:
 ```  
 git clone https://github.com/danjweiner/AMM21.git
 ```
