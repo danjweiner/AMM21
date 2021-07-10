@@ -21,4 +21,16 @@ The repository contains the Conda environment file (amm.yml) for running `AMM`. 
 
 ## Overview of `AMM` workflow
 
+We've broken down the `AMM` workflow into the following steps, which we will walk through one by one.
+
 ![alt text](https://github.com/danjweiner/AMM21/blob/main/AMM_reference_files/AMM_overview.png)
+
+In broad strokes, the workflow involves:
+**Module 1-3**: Preparing for analysis by creating an annotation matrix based on your gene set of interest
+**Module 4, 6.2, 7**: Estimating p(k). You can skip this branch all together if you already have p(k) estimates you'd like to use. For example, you could use our p(k) estimates from the manuscript (see below). 
+**Module 5, 6.1, 8**: Estimated e(A), mediated heritability enrichment.
+
+With that, let's get into it:
+
+## Module 1
+
