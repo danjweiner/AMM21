@@ -19,6 +19,8 @@ git clone https://github.com/danjweiner/AMM21.git
 ```
 The repository contains the Conda environment file (amm.yml) for running `AMM`. Note that this environment includes Python 2.7, which is required by the `AMM` dependency [LD Score Regression](https://github.com/bulik/ldsc). On that note, you will need to download `LDSC` to run `AMM`, which you can do at the previous link.
 
+`AMM` is written to be run on a cluster, which allows you to submit an array job to speed things up! You'll note that many modules require a flag `--iterator`, where you pass the task array environment variable.  
+
 ## Overview of `AMM` workflow
 
 We've broken down the `AMM` workflow into the following steps, which we will walk through one by one. In broad strokes, the workflow involves:
@@ -39,8 +41,36 @@ In this step, we need to define the k-th closest gene to each SNP. In `AMM`, we'
 
 If you want to create your own, run the following `AMM` command:
 
-  test
-  test
+```
+python amm.py\
+	--m 1\
+	--iterator [iterator variable; submit 1 job per autosome, so jobs: 1-22]\
+	--genes_ref [text file with 1 row per gene, with a column of gene names and a column of gene locations in BP, by chromosome, ending .txt]\
+	--snp_ref_bim [a text file mapping SNP RSID to SNP BP location; a .bim file from 1KG or equivalent works well, by chromosome, ending .bim]\
+	--kn_k [How many rank columns you would like in the output matrix; we used 50]\
+	--snp_loc_col [Column index of SNP location (0-indexed)]\
+	--genes_loc_col [Column index of gene location (0-indexed)]\
+	--out [Directory where you would like the kn-matrix to print out]\
+	--snp_rsid_col [Column index of SNP name (0-indexed)]\
+	--genes_ensg_col [Column index of Gene name (0-indexed)]
+```
 
-boop 
+More concretely, the command might look like:
+
+```
+python path_to_amm/amm.py\
+	--m 1\
+	--iterator "$SGE_TASK_ID"\
+	--genes_ref path_to_reference_files/gnomad_gene_location_guide_17661_chr\
+	--snp_ref_bim path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.\
+	--kn_k 50\
+	--snp_loc_col 3\
+	--genes_loc_col 7\
+	--out path/kn_matrix/\
+	--snp_rsid_col 1\
+	--genes_ensg_col 1
+```
+The full file paths for the two files called are `path_to_reference_files/gnomad_gene_location_guide_17661_chr[#].txt` and `path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.[#].bim`
+
+
 
