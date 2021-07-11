@@ -80,11 +80,39 @@ You need two ingredients to make an annotation matrix:
 
 The first is the kn-matrix from Module 1, which you either created or downloaded premade. 
 
-The second ingredient are gene sets. Each gene set is described by a list of genes in a text file, one gene per line. Some important notes:
+The second ingredient are gene sets. Each gene set is described by a list of genes in a text file, one gene per line, no header. Some important notes:
 * Our premade kn-matrices use ENSG gene IDs (i.e. ENSG00000130164), so your text file with gene names must have ENSG gene names). 
-* If you have a gene in your gene set that isn't in the kn-matrix, its as if it doesn't exist. So, its critical to cross-reference your gene set with the genes used to create the kn-matrix. If you use your kn-matrices, cross reference with 
+* If you have a gene in your gene set that isn't in the kn-matrix, its as if it doesn't exist. So, its critical to cross-reference your gene set with the genes used to create the kn-matrix. If you use your kn-matrices, cross reference with `gnomad_gene_location_guide_17661.txt` in the AMM_reference_files folder in this repository.
+* Each gene set gets its own text file, ending in .txt. Place these files in the AMM working directory 
 
-Each gene set gets its own text file; each must end in .txt. Once you have created at least one gene set text file, create a second text file listing your gene sets; this is the text file you will feed into `AMM`.   
+Now you're ready to make annotations:
 
+```
+python amm.py\
+	--m 2\
+	--iterator [iterator variable; submit 1 job per autosome, so jobs: 1-22]\
+	--set_names [gene set summary file, see below]\
+	--kn_in_dir [directory where your kn-matrices live]\
+	--out [AMM working directory]\
+	--kn_k [number of proximity annotations you would like; must be less than or equal to the number of columns in the kn-matrix]
+```
 
+More concretely, the command might look like:
 
+```
+python path_to_amm/amm.py\
+	--m 2\
+	--iterator "$SGE_TASK_ID"\
+	--set_names amm_gs.txt\
+	--kn_in_dir path/kn_matrix/\
+	--out amm_working_directory/\
+	--kn_k 50
+```
+A few additional notes:
+* `amm_gs.txt` lists your gene set files, one per line. The gene set files are listed *without* extensions and *without* .txt. For instance, if in your AMM working directory you have a `gene_set_1.txt` and `gene_set_2.txt`, then your file amm_gs.txt would be:
+
+```
+gene_set_1
+gene_set_2
+```
+## Module 3: 
