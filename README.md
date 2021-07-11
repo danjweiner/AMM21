@@ -115,4 +115,37 @@ A few additional notes:
 gene_set_1
 gene_set_2
 ```
-## Module 3: 
+## Module 3: Estimate LD scores
+
+In this module, we use `LDSC` to estimate LD scores for the annotations we created in Module 2. The `AMM` call here makes it a bit easier to estimate LD scores for all of our gene sets at once. Refer to the `LDSC` documentation for more detail if needed. 
+
+The setup is:
+
+```
+python amm.py\
+	--m 3\
+	--iterator [iterator variable; submit 1 job per autosome per gene set. For instance, if you want LD scores for 3 gene sets, you would submit 3*22 = 66 jobs]\
+	--set_names [gene set summary file, see below]\
+	--ldsc_path [path to `LDSC`]\
+	--lds_ref_binary [path to LD reference panel, .bim/.bed/.fam format]\
+	--lds_snps_out [path to list of SNPs per chromosome for which we will print LD scores]\
+	--out [AMM working directory]\
+```
+
+More concretely, the command might look like
+
+```
+python path_to_amm/amm.py\
+	--m 3\
+	--iterator "$SGE_TASK_ID"\
+	--set_names amm_gs.txt\
+	--ldsc_path path_to_ldsc/ldsc.py\
+	--lds_ref_binary path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.\
+	--lds_snps_out path_to_snp_files/snps.\
+	--out amm_working_directory/\
+```
+where the full file names are: `path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.[#].bim/bed/fam` and `path_to_snp_files/snps.[#].snps`. `amm_gs.txt` is the same file from Module 2.
+
+
+
+
