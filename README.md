@@ -70,7 +70,21 @@ python path_to_amm/amm.py\
 	--snp_rsid_col 1\
 	--genes_ensg_col 1
 ```
-The full file paths for the two files called are `path_to_reference_files/gnomad_gene_location_guide_17661_chr[#].txt` and `path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.[#].bim`
+The full file names are `path_to_reference_files/gnomad_gene_location_guide_17661_chr[#].txt` and `path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.[#].bim`
+
+## Module 2: LD score annotations
+
+The goal of this step is to create a per-chromosome SNP-by-proximity annotation matrix. The entries in this matrix are 1 or 0, denoting whether the kth closest gene to the SNP is in a gene set. Thus, for each gene set, you will create a new set of 22 annotation matrices, one per chromosome. 
+
+You need two ingredients to make an annotation matrix: 
+
+The first is the kn-matrix from Module 1, which you either created or downloaded premade. 
+
+The second ingredient are gene sets. Each gene set is described by a list of genes in a text file, one gene per line. Some important notes:
+* Our premade kn-matrices use ENSG gene IDs (i.e. ENSG00000130164), so your text file with gene names must have ENSG gene names). 
+* If you have a gene in your gene set that isn't in the kn-matrix, its as if it doesn't exist. So, its critical to cross-reference your gene set with the genes used to create the kn-matrix. If you use your kn-matrices, cross reference with 
+
+Each gene set gets its own text file; each must end in .txt. Once you have created at least one gene set text file, create a second text file listing your gene sets; this is the text file you will feed into `AMM`.   
 
 
 
