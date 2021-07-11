@@ -39,5 +39,8 @@ In this step, we need to define the k-th closest gene to each SNP. In `AMM`, we'
 
 If you want to create your own, run the following `AMM` command:
 
+  test
+  test
 
+boop 
 
