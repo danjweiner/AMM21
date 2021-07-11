@@ -1,5 +1,5 @@
 # AMM
-`AMM` is a command-line tool to run the Abstract Mediation Model. For details on the method and application, please see Weiner et al 2021, biorxiv. Please cite that manuscript if you use this command-line tool in your own work.
+`AMM` is a command-line tool to run the Abstract Mediation Model. For details on the method and application, please see Weiner et al. 2021, bioRxiv. Please cite that manuscript if you use this command-line tool in your own work.
 
 ## Overview
 
@@ -37,7 +37,7 @@ With that, let's get into it:
 
 ## Module 1: Estimate kn-matrix
 
-In this step, we need to define the k-th closest gene to each SNP. In `AMM`, we've written a function that takes in gene positions, SNP positions, and outputs a SNP x gene rank matrix for each chromosome, where the elements of the matrix are gene names. Since this is a bit memory intensive, and since most users of `AMM` won't need to re-make these, **we've published ours that you can download so you don't have to do Module 1 yourself** [here](https://drive.google.com/drive/u/1/folders/1t3tSCILksoGI16zqc-4vvfRcMfMNXLH1). We created these matrices out to the 50th closest gene.
+In this step, we need to define the k-th closest gene to each SNP. In `AMM`, we've written a function that takes in gene positions, SNP positions, and outputs a SNP x gene rank matrix for each chromosome, where the elements of the matrix are gene names. Since this is a bit memory intensive, and since most users of `AMM` won't need to re-make these, **we've published ours [here](https://drive.google.com/drive/u/1/folders/1t3tSCILksoGI16zqc-4vvfRcMfMNXLH1) so you don't have to run Module 1** . We created these matrices out to the 50th closest gene.
 
 If you want to create your own, run the following `AMM` command:
 
@@ -125,14 +125,14 @@ The setup is:
 python amm.py\
 	--m 3\
 	--iterator [iterator variable; submit 1 job per autosome per gene set. For instance, if you want LD scores for 3 gene sets, you would submit 3*22 = 66 jobs]\
-	--set_names [gene set summary file, see below]\
+	--set_names [gene set summary file, see Module 2 for details]\
 	--ldsc_path [path to `LDSC`]\
 	--lds_ref_binary [path to LD reference panel, .bim/.bed/.fam format]\
 	--lds_snps_out [path to list of SNPs per chromosome for which we will print LD scores]\
 	--out [AMM working directory]\
 ```
 
-More concretely, the command might look like
+More concretely, the command might look like:
 
 ```
 python path_to_amm/amm.py\
@@ -146,6 +146,37 @@ python path_to_amm/amm.py\
 ```
 where the full file names are: `path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.[#].bim/bed/fam` and `path_to_snp_files/snps.[#].snps`. `amm_gs.txt` is the same file from Module 2.
 
+**If you have pre-generated p(k) values and want to skip to estimating mediated heritability enrichment of a gene set, scroll down to Module 5** Pre-generated p(k) trained on constrained genes is available in the Supplementary Tables of the manuscript.
+
+## Module 4: Bunch LD scores for estimating p(k)
+
+The purpose of bunching LD scores is to estimate a mean p(k) for a group of annotations. Bunching means summing LD scores in the annotations being bunched into a group. For example, if in Module 3 you generated LD scores for the closest - 10th closest genes, perhaps instead of estimating p(k) for each rank (likely noisy), you can estimate the average for the closest, 2-5th, and 6th-10th closest genes. Module 4 allows you to specify which bins you would like to create:
+
+```
+python amm.py\
+	--m 4\
+	--iterator [iterator variable; submit 1 job per autosome per gene set. For instance, if you want LD scores for 3 gene sets, you would submit 3*22 = 66 jobs]\
+	--out [AMM working directory]\
+	--pk_size [list specifying bunching; one integer per group, number of integers is number of groups. Sum of integers in list must equal number of proximity annotations so all annotations end up in a group]\
+	--set_names [gene set summary file, see Module 2 for details]
+```
+More concretely, the command might look like:
+```
+python path_to_amm/amm.py\
+	--m 4\
+	--iterator "$SGE_TASK_ID"\
+	--out amm_working_directory/\
+	--pk_size 1 1 3 5 10 10 10 10\
+	--set_names amm_gs.txt
+```
+The annotations are bunched from start to end of the array. For example, the array given `1 1 3 5 10 10 10 10` sums to 50, which is the number of proximity annotations we created (i.e., closest - 50th closest genes across 50 columns, left to right). This list will create the following 8 bunches: closest gene, 2nd closest gene, 3rd-5th closest gene, 6th-10th closest gene, 11th-20th closest gene, 21st-30th closest gene, 31st-40th closest gene, 41st-50th closest gene.
 
 
 
+
+
+
+
+
+# Software authorship
+Daniel Weiner (Broad Institute)
