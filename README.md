@@ -307,7 +307,7 @@ A few notes:
 
 `--control_name_m` This is the path to the `LDSC` .M file that corresponds to the control annotation you are analyzing (see manuscript Online Methods for motivation). The path given corresponds to files with full name `/path_to_m_file/baselineLD.1.l2.M`,  `/path_to_m_file/baselineLD.2.l2.M`, etc. See `LDSC` documentation for more details about these files.
 
-
+`--n_genes_total` The number of genes in the genome (as you define it). Required so that `AMM` knows what fraction of genes are in your gene set. This should be the same number of genes as are in the original kn-matrix generated from Module 1. If you used our kn-matrix, the number is 17,661 genes. 
 
 
 
