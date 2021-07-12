@@ -213,7 +213,7 @@ A few file format notes:
 
 The --weights and --freq_file arguments are standard from `LDSC` and can be downloaded from their repository.
 
-# Module 7: Estimate p(k)
+## Module 7: Estimate p(k)
 
 The purpose of Module 7 is to take the regression output from Module 6.2 and estimate p(k) from a single trait-gene set pair or (more commonly) through meta-analysis of more than 1 trait-gene set pair. The outline of a Module 7 run is:
 
@@ -246,9 +246,31 @@ A few notes:
 
 `--ss_list` This is the same format as the summary statistics files above. In a similar way to `--set_names`, *you can specify a subset of traits to meta-analyze over* by subsetting the summary statistics text file to the traits you want.
 
+## Module 5: Bunch LD scores for AMM gene set enrichment
 
+While AMM can estimate p(k) and gene set enrichment simultaneously, it has more power when p(k) is estimated first and then that estimate of SNP-to-gene architecture is used in the gene set enrichment estimates. Module 5 is where we take advantage of that by inputting estimates of p(k), either that you computed in Module 7 or that you got from somewhere else (such as Supplementary Table of the manuscript). 
 
+Module 5 takes the LD scores generated in Module 3 and calculates a single LD score: the dot product of the p(k) weight vector and the original LD score vector. This dot product represents weighting the original LD scores by the p(k) weights. The command looks like:
 
+```
+python amm.py\
+	--m 5\
+	--iterator [iterator variable; submit 1 job per autosome per gene set. For instance, if you want LD scores for 3 gene sets, you would submit 3*22 = 66 jobs]\
+	--set_names [gene set summary file, see Module 2 for details]\
+	--pk_vector [p(k) list, same ordering as the --pk_size bunch list]\
+	--pk_size [list specifying annotation bunching size; same as Module 4]\
+	--out [AMM working directory]
+```
+More concretely, the command might look like:
+```
+python amm.py\
+	--m 5\
+	--iterator "$SGE_TASK_ID"\
+	--set_names /path_to_set_names/amm_gs.txt\
+	--pk_vector 0.271 0.145 0.0133 0.0163 0.023 0.011 0.012 0.001\
+	--pk_size 1 1 3 5 10 10 10 10\
+	--out /path_to_amm_working_directory/
+```
 
 
 
