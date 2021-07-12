@@ -309,8 +309,3 @@ A few notes:
 
 `--n_genes_total` The number of genes in the genome (as you define it). Required so that `AMM` knows what fraction of genes are in your gene set. This should be the same number of genes as are in the original kn-matrix generated from Module 1. If you used our kn-matrix, the number is 17,661 genes. 
 
-
-
-**Software authorship**
-Daniel Weiner (Broad Institute)
-2021
