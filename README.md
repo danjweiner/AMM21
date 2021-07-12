@@ -37,7 +37,7 @@ With that, let's get into it:
 
 ## Module 1: Estimate kn-matrix
 
-In this step, we need to define the k-th closest gene to each SNP. In `AMM`, we've written a function that takes in gene positions, SNP positions, and outputs a SNP x gene rank matrix for each chromosome, where the elements of the matrix are gene names. Since this is a bit memory intensive, and since most users of `AMM` won't need to re-make these, **we've published ours [here](https://drive.google.com/drive/u/1/folders/1t3tSCILksoGI16zqc-4vvfRcMfMNXLH1) so you don't have to run Module 1** . We created these matrices out to the 50th closest gene.
+In this step, we need to define the k-th closest gene to each SNP. In `AMM`, we've written a function that takes in gene positions, SNP positions, and outputs a SNP x gene rank matrix for each chromosome, where the elements of the matrix are gene names. Since this is a bit memory intensive, and since most users of `AMM` won't need to re-make these, **we've uploaded ours [here](https://drive.google.com/drive/u/1/folders/1t3tSCILksoGI16zqc-4vvfRcMfMNXLH1) so you don't have to run Module 1** . We created these matrices out to the 50th closest gene.
 
 If you want to create your own, run the following `AMM` command:
 
@@ -176,7 +176,7 @@ The annotations are bunched from start to end of the array. For example, the arr
 
 Module 6 generates a regression call in `LDSC`, and submodule 6.2 is expecting the specific output generated in Module 4. This command will output regression coefficients for each of our annotations, which we will use next in Module 7 to estimate p(k). 
 
-Module 6.2 is designed to allow you to run lots of regressions at once. Specifically, you provide (a) a list of at least 1 gene set (b) a list of at least 1 GWAS summary statistic (c) a list of at least 1 set of control annotations (like the Baseline LD model). Module 6.2 will run a `LDSC` regression for each combination; for example, if you provided 3 gene sets, 10 traits, and 1 control annotation, it would run 3 * 10 * 1 = 30 regressions.
+Module 6.2 is designed to allow you to run lots of regressions at once. Specifically, you provide (a) a list of at least 1 gene set (b) a list of at least 1 GWAS summary statistic (c) a list of at least 1 set of control annotations (like the Baseline LD model). Module 6.2 will run a `LDSC` regression for each combination; for example, if you provided 3 gene sets, 10 traits, and 1 control annotation, it would run 3 * 10 * 1 = 30 regressions. The outline of a Module 6.2 run is:
 
 ```
 python amm.py\
@@ -193,7 +193,7 @@ python amm.py\
 ```
 More concretely, the command might look like:
 ```
-python amm.py\
+python path_to_amm/amm.py\
 	--m 6\
 	--which_regression 2\
 	--iterator "$SGE_TASK_ID"\
@@ -207,10 +207,44 @@ python amm.py\
 ```
 A few file format notes:
 
-`path_to_summary_statistics_file/amm_ss_full_47.txt` is a text file listing the name and path to GWAS summary statistics files. Each line of the file requires format: [trait name]:[path to summary statistics file]. For example, you might have on one line: `standing_height:/path_to_summary_statistics/standing_height.txt`
+`path_to_summary_statistics_file/amm_ss_full_47.txt` is a text file listing the name and path to GWAS summary statistics files. Each line of the file requires format: [trait name]:[path to summary statistics file]. For example, you might have on one line: `standing_height:/path_to_summary_statistics/standing_height.txt`. The summary statistics format must be compatable with `LDSC`; see their documentation on [munge_sumstats.py](https://github.com/bulik/ldsc/wiki/Heritability-and-Genetic-Correlation) for more details.
 
+`/path_to_control_list/control_list.txt` is a text file listing the name and path to any control annotation you want to add to your regression. For example, it is common to add the [Baseline LD model](https://alkesgroup.broadinstitute.org/LDSCORE/) to `LDSC`. If you wanted to add this control annotation, you would in the format [control name]:[path to control LD scores], for example: `baseline_ld:/path_to_baseline_ld/baselineLD.` which will reference the files /path_to_baseline_ld/baselineLD.1.l2.ldscore.gz, /path_to_baseline_ld/baselineLD.2.l2.ldscore.gz, etc. 
 
+The --weights and --freq_file arguments are standard from `LDSC` and can be downloaded from their repository.
 
+# Module 7: Estimate p(k)
+
+The purpose of Module 7 is to take the regression output from Module 6.2 and estimate p(k) from a single trait-gene set pair or (more commonly) through meta-analysis of more than 1 trait-gene set pair. The outline of a Module 7 run is:
+
+```
+python amm.py\
+	--m 7\
+	--out [AMM working directory]\
+	--pk_size [list specifying annotation bunching size; same as Module 4]\
+	--pk_control_name [name of control annotation in the input files]\
+	--pk_out_name [outname of p(k) results file]\
+	--set_names [gene sets you want to meta-analyze over]\
+	--ss_list [list of summary statistics for meta-analysis, same format as in Module 6.2]
+```
+More concretely, the command might look like:
+```
+python path_to_amm/amm.py\
+	--m 7\
+	--out /path_to_amm_working_directory/\
+	--pk_size 1 1 3 5 10 10 10 10\
+	--pk_control_name baseline_ld\
+	--pk_out_name cortex_liver_baseline_all_traits.txt\
+	--set_names cortex_liver.txt\
+	--ss_list /path_to_summary_statistics_file/amm_ss_full_47.txt
+```
+A few notes:
+
+`--pk_control_name` We've written meta-analysis to be performed across only one set of control annotations at a time. If you created runs with different control annotations in Module 6.2, specify the name of the control annotation you want to include here. You select it by matching the argument of `--pk_control_name` with one of the names in `--control_list` from Module 6.2.
+
+`--set_names` This is the same format as `--set_names` from Module 2. *You can specify a subset of gene sets to meta-analyze over* by editing this text file to include only a subset of gene set names.
+
+`--ss_list` This is the same format as the summary statistics files above. In a similar way to `--set_names`, *you can specify a subset of traits to meta-analyze over* by subsetting the summary statistics text file to the traits you want.
 
 
 
