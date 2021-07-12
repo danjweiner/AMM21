@@ -7,7 +7,7 @@
 1) p(k): The fraction of heritability mediated by the kth-closest gene
 2) e(A): Mediated heritability enrichment of a gene set
 
-What you need to provide for estimation:
+The two main ingredients you'll need for estimation are:
 1) GWAS summary statistics
 2) Gene sets for either 1) learning p(k) or 2) estimation of e(A)
 
@@ -61,8 +61,8 @@ More concretely, the command might look like:
 python path_to_amm/amm.py\
 	--m 1\
 	--iterator "$SGE_TASK_ID"\
-	--genes_ref path_to_reference_files/gnomad_gene_location_guide_17661_chr\
-	--snp_ref_bim path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.\
+	--genes_ref /path_to_reference_files/gnomad_gene_location_guide_17661_chr\
+	--snp_ref_bim /path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.\
 	--kn_k 50\
 	--snp_loc_col 3\
 	--genes_loc_col 7\
@@ -103,9 +103,9 @@ More concretely, the command might look like:
 python path_to_amm/amm.py\
 	--m 2\
 	--iterator "$SGE_TASK_ID"\
-	--set_names amm_gs.txt\
-	--kn_in_dir path/kn_matrix/\
-	--out amm_working_directory/\
+	--set_names /path_to_set_names/amm_gs.txt\
+	--kn_in_dir /path/kn_matrix/\
+	--out /path_to_amm_working_directory/\
 	--kn_k 50
 ```
 A few additional notes:
@@ -115,6 +115,7 @@ A few additional notes:
 gene_set_1
 gene_set_2
 ```
+
 ## Module 3: Estimate LD scores
 
 In this module, we use `LDSC` to estimate LD scores for the annotations we created in Module 2. The `AMM` call here makes it a bit easier to estimate LD scores for all of our gene sets at once. Refer to the `LDSC` documentation for more detail if needed. 
@@ -138,11 +139,11 @@ More concretely, the command might look like:
 python path_to_amm/amm.py\
 	--m 3\
 	--iterator "$SGE_TASK_ID"\
-	--set_names amm_gs.txt\
-	--ldsc_path path_to_ldsc/ldsc.py\
-	--lds_ref_binary path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.\
-	--lds_snps_out path_to_snp_files/snps.\
-	--out amm_working_directory/\
+	--set_names /path_to_set_names/amm_gs.txt\
+	--ldsc_path /path_to_ldsc/ldsc.py\
+	--lds_ref_binary /path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.\
+	--lds_snps_out /path_to_snp_files/snps.\
+	--out /path_to_amm_working_directory/\
 ```
 where the full file names are: `path_to_reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC.[#].bim/bed/fam` and `path_to_snp_files/snps.[#].snps`. `amm_gs.txt` is the same file from Module 2.
 
@@ -165,11 +166,57 @@ More concretely, the command might look like:
 python path_to_amm/amm.py\
 	--m 4\
 	--iterator "$SGE_TASK_ID"\
-	--out amm_working_directory/\
+	--out /path_to_amm_working_directory/\
 	--pk_size 1 1 3 5 10 10 10 10\
-	--set_names amm_gs.txt
+	--set_names /path_to_set_names/amm_gs.txt
 ```
 The annotations are bunched from start to end of the array. For example, the array given `1 1 3 5 10 10 10 10` sums to 50, which is the number of proximity annotations we created (i.e., closest - 50th closest genes across 50 columns, left to right). This list will create the following 8 bunches: closest gene, 2nd closest gene, 3rd-5th closest gene, 6th-10th closest gene, 11th-20th closest gene, 21st-30th closest gene, 31st-40th closest gene, 41st-50th closest gene.
+
+## Module 6.2: LD Score Regression for estimating p(k)
+
+Module 6 generates a regression call in `LDSC`, and submodule 6.2 is expecting the specific output generated in Module 4. This command will output regression coefficients for each of our annotations, which we will use next in Module 7 to estimate p(k). 
+
+Module 6.2 is designed to allow you to run lots of regressions at once. Specifically, you provide (a) a list of at least 1 gene set (b) a list of at least 1 GWAS summary statistic (c) a list of at least 1 set of control annotations (like the Baseline LD model). Module 6.2 will run a `LDSC` regression for each combination; for example, if you provided 3 gene sets, 10 traits, and 1 control annotation, it would run 3 * 10 * 1 = 30 regressions.
+
+```
+python amm.py\
+	--m 6\
+	--which_regression [specify which submodule to run]\
+	--iterator [iterator variable; submit 1 job per regression. If you provided 3 gene sets, 10 traits, and 1 control annotation, submit 3 * 10 * 1 = 30 jobs]\
+	--set_names [gene set summary file, see Module 2 for details]\
+	--ss_list [list of trait names and summary statistics paths, see below for formating details]\
+	--control_list [list of control annotations names and paths, see below for formating details]\
+	--weights [LDSC regression weights]\
+	--freq_file [LDSC allele frequency file]\
+	--ldsc_path [path to LDSC]\
+	--out [AMM working directory]
+```
+More concretely, the command might look like:
+```
+python amm.py\
+	--m 6\
+	--which_regression 2\
+	--iterator "$SGE_TASK_ID"\
+	--set_names /path_to_set_names/amm_gs.txt\
+	--ss_list /path_to_summary_statistics_file/amm_ss_full_47.txt\
+	--control_list /path_to_control_list/control_list.txt\
+	--weights /path_to_weights/weights.hm3_noMHC.\
+	--freq_file /path_to_frequency_file/1000G.EUR.QC.\
+	--ldsc_path /path_to_ldsc/ldsc.py\
+	--out /path_to_amm_working_directory/
+```
+A few file format notes:
+
+`path_to_summary_statistics_file/amm_ss_full_47.txt` is a text file listing the name and path to GWAS summary statistics files. Each line of the file requires format: [trait name]:[path to summary statistics file]. For example, you might have on one line: `standing_height:/path_to_summary_statistics/standing_height.txt`
+
+
+
+
+
+
+
+
+
 
 
 
