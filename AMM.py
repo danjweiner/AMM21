@@ -29,7 +29,7 @@ parser.add_argument('--freq_file', help="Allele frequencies, available from LD s
 parser.add_argument('--weights', help="LD score regression weights, available from LD score repository, ending before chr integer", required=False)
 parser.add_argument('--ldsc_path', help="Path to ld score regression", required=False)
 parser.add_argument('--control_name', help="Name of control annotation used", required=False)
-parser.add_argument('--control_name_m', help="Name of control annotation in the reference .M file", required=False)
+parser.add_argument('--control_name_m', help="Path to control annotation in the reference .M file, up to chromosome integer", required=False)
 parser.add_argument('--pk_out_name', help="Name of file created in p(k) meta-analysis", required=False)
 parser.add_argument("--n_genes_total", help="Genes in genome", required=False, type = int)
 parser.add_argument('--n_jk', nargs='?', const=200, type=int, default=200, required = False)
@@ -346,7 +346,7 @@ if __name__ == '__main__':
 		
 		m_files = {}
 		for chrom in range(1, 23):
-			m_files[chrom] = pd.read_csv("/psych/genetics_data/dweiner/grad/lds_files/amm_reference/ldsc_ref_files/"+args.control_name_m+"."+str(chrom)+".l2.M", sep = "\t", header = None)
+			m_files[chrom] = pd.read_csv(args.control_name_m+"."+str(chrom)+".l2.M", sep = "\t", header = None)
 		m_files_sum_across_chr = pd.concat(m_files).sum()
 		
 		sets_names = pd.read_csv(args.set_names, header = None)[0].tolist()
