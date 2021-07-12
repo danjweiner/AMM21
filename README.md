@@ -263,7 +263,7 @@ python amm.py\
 ```
 More concretely, the command might look like:
 ```
-python amm.py\
+python path_to_amm/amm.py\
 	--m 5\
 	--iterator "$SGE_TASK_ID"\
 	--set_names /path_to_set_names/amm_gs.txt\
@@ -272,14 +272,45 @@ python amm.py\
 	--out /path_to_amm_working_directory/
 ```
 
+## Module 6.1: LD Score Regression for estimating AMM gene set enrichment
+
+Exactly the same as Module 6.2, just put a "1" as the argument for `--which_regression`. 
+
+## Module 8: AMM gene set enrichments
+
+Module 8 estimates mediated heritability enrichments of gene sets using the regression outputs from Module 6.1. You can estimate enrichment of each trait in each gene set simultaneously that you list below. The only restriction is each module run can only handle a single control annotation name.
+
+```
+python amm.py\
+	--m 8\
+	--out [AMM working directory]\
+	--set_names [gene set summary file, see Module 2 for details]\
+	--control_name [name of control annotation in the input files]\
+	--control_name_m [full path to control annotation in the .M LD score annotation size files, up to chromosome integer]\
+	--ss_list [list of summary statistics, same format as in Module 6.2]\
+	--n_genes_total [Number of genes in genome]
+```
+More concretely, the command might look like:
+```
+python path_to_amm/amm.py\
+	--m 8\
+	--out /path_to_amm_working_directory/\
+	--set_names /path_to_set_names/amm_gs.txt\
+	--control_name baseline_full\
+	--control_name_m /path_to_m_file/baselineLD\
+	--ss_list /path_to_summary_statistics_file/amm_ss_full_47.txt\
+	--n_genes_total 17661
+```
+A few notes:
+
+`--control_name` This control name must match one of the control names given in Module 6.1
+
+`--control_name_m` This is the path to the `LDSC` .M file that corresponds to the control annotation you are analyzing (see manuscript Online Methods for motivation). The path given corresponds to files with full name `/path_to_m_file/baselineLD.1.l2.M`,  `/path_to_m_file/baselineLD.2.l2.M`, etc. See `LDSC` documentation for more details about these files.
 
 
 
 
 
-
-
-
-
-# Software authorship
+**Software authorship**
 Daniel Weiner (Broad Institute)
+2021
