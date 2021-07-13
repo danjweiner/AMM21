@@ -222,7 +222,7 @@ python amm.py\
 	--m 7\
 	--out [AMM working directory]\
 	--pk_size [list specifying annotation bunching size; same as Module 4]\
-	--pk_control_name [name of control annotation in the input files]\
+	--control_name [name of control annotation in the input files]\
 	--pk_out_name [outname of p(k) results file]\
 	--set_names [gene sets you want to meta-analyze over]\
 	--ss_list [list of summary statistics for meta-analysis, same format as in Module 6.2]
@@ -233,14 +233,14 @@ python path_to_amm/amm.py\
 	--m 7\
 	--out /path_to_amm_working_directory/\
 	--pk_size 1 1 3 5 10 10 10 10\
-	--pk_control_name baseline_ld\
+	--control_name baseline_ld\
 	--pk_out_name cortex_liver_baseline_all_traits.txt\
 	--set_names cortex_liver.txt\
 	--ss_list /path_to_summary_statistics_file/amm_ss_full_47.txt
 ```
 A few notes:
 
-`--pk_control_name` We've written meta-analysis to be performed across only one set of control annotations at a time. If you created runs with different control annotations in Module 6.2, specify the name of the control annotation you want to include here. You select it by matching the argument of `--pk_control_name` with one of the names in `--control_list` from Module 6.2.
+`--control_name` We've written meta-analysis to be performed across only one set of control annotations at a time. If you created runs with different control annotations in Module 6.2, specify the name of the control annotation you want to include here. You select it by matching the argument of `--pk_control_name` with one of the names in `--control_list` from Module 6.2.
 
 `--set_names` This is the same format as `--set_names` from Module 2. *You can specify a subset of gene sets to meta-analyze over* by editing this text file to include only a subset of gene set names.
 
