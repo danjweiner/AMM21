@@ -278,7 +278,7 @@ Exactly the same as Module 6.2, just put a "1" as the argument for `--which_regr
 
 ## Module 8: AMM gene set enrichments
 
-Module 8 estimates mediated heritability enrichments of gene sets using the regression outputs from Module 6.1. You can estimate enrichment of each trait in each gene set simultaneously that you list below. The only restriction is each module run can only handle a single control annotation name.
+Module 8 estimates mediated heritability enrichments of gene sets using the regression outputs from Module 6.1. You can estimate enrichment of each trait in each gene set simultaneously that you list below. The only restriction is each module run can only handle a single control annotation name. Note that enrichment_z = (enrichment_mean - 1)/(enrichment_se), since significance is relative to a null that enrichment_mean = 1.
 
 ```
 python amm.py\
