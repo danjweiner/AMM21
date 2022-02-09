@@ -1,5 +1,5 @@
 # AMM
-`AMM` is a command-line tool to run the Abstract Mediation Model. For details on the method and application, please see [Weiner et al. 2021, bioRxiv](https://www.biorxiv.org/content/10.1101/2021.07.14.452393v1). Please cite that manuscript if you use this command-line tool in your own work.
+`AMM` is a command-line tool to run the Abstract Mediation Model. For details on the method and application, please see [Weiner et al. 2022, AJHG](https://www.cell.com/ajhg/fulltext/S0002-9297(22)00010-6#%20). Please cite that manuscript if you use this command-line tool in your own work.
 
 ## Overview
 
