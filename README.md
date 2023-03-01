@@ -82,7 +82,7 @@ The first is the kn-matrix from Module 1, which you either created or downloaded
 
 The second ingredient are gene sets. Each gene set is described by a list of genes in a text file, one gene per line, no header. Some important notes:
 * Our premade kn-matrices use ENSG gene IDs (i.e. ENSG00000130164), so your text file with gene names must have ENSG gene names). 
-* If you have a gene in your gene set that isn't in the kn-matrix, its as if it doesn't exist. So, its critical to cross-reference your gene set with the genes used to create the kn-matrix. If you use your kn-matrices, cross reference with `gnomad_gene_location_guide_17661.txt` in the AMM_reference_files folder in this repository.
+* If you have a gene in your gene set that isn't in the kn-matrix, it is as if it doesn't exist. So, it is critical to cross-reference your gene set with the genes used to create the kn-matrix. If you use our kn-matrices, cross reference with `gnomad_gene_location_guide_17661.txt` in the AMM_reference_files folder in this repository.
 * Each gene set gets its own text file, ending in .txt. Place these files in the AMM working directory 
 
 Now you're ready to make annotations:
