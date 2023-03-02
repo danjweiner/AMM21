@@ -14,7 +14,8 @@ parser.add_argument("--snp_rsid_col", help="Column index of SNP name (0-indexed)
 parser.add_argument("--genes_ref", help="Text file with 1 row per gene, with a column of gene names and a column of gene locations in BP, by chromosome, ending .txt", required=False)
 parser.add_argument("--genes_loc_col", help="Column index of gene location (0-indexed)", required=False, type = int)
 parser.add_argument("--genes_ensg_col", help="Column index of Gene name (0-indexed)", required=False, type = int)
-parser.add_argument("--kn_k", help="Module 1: Number of rank columns you would like in the output matrix; Module 2: number of proximity annotations you would like; must be less than or equal to the number of columns in the kn-matrix", required=False, type = int)
+parser.add_argument("--kn_k", help="Module 1: Number of rank columns you would like in the output matrix; Module 2: number of columns in your kn matrix", required=False, type = int)
+parser.add_argument("--kn_k_out", help="Module 2: number of proximity annotations you would like; must be less than or equal to the number of columns in the kn-matrix", required=False, type = int)
 parser.add_argument('--m', help="module number", required=True, type = int)
 parser.add_argument('--out', help="AMM working directory", required=True)
 parser.add_argument('--kn_in_dir', help="directory where your kn-matrices live", required=False)
@@ -187,7 +188,7 @@ if __name__ == '__main__':
 
 		for index in range(len(sets_names)): 
 			gene_set = pd.read_csv(args.out+sets_names[index]+".txt", header = None)[0].tolist()
-			filter_k_closest(reduce_k(kn, args.kn_k), gene_set).to_csv(args.out+sets_names[index]+'_chr'+str(args.iterator)+'.annot.gz', sep = " ", header = True, index = False, compression='gzip')
+			filter_k_closest(reduce_k(kn, args.kn_k_out), gene_set).to_csv(args.out+sets_names[index]+'_chr'+str(args.iterator)+'.annot.gz', sep = " ", header = True, index = False, compression='gzip')
 
 		print('Completed module 2 for chromosome ' + str(args.iterator))
 		
