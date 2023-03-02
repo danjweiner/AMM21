@@ -94,7 +94,8 @@ python amm.py\
 	--set_names [gene set summary file, see below]\
 	--kn_in_dir [directory where your kn-matrices live]\
 	--out [AMM working directory]\
-	--kn_k [number of proximity annotations you would like; must be less than or equal to the number of columns in the kn-matrix]
+	--kn_k [number of columns in your input kn matrix (in provided matrices, this is 50)]\
+	--kn_k_out [number of proximity annotations you would like; must be less than or equal to the number of columns in the kn-matrix]
 ```
 
 More concretely, the command might look like:
@@ -106,6 +107,7 @@ python path_to_amm/amm.py\
 	--set_names /path_to_set_names/amm_gs.txt\
 	--kn_in_dir /path/kn_matrix/\
 	--out /path_to_amm_working_directory/\
+	--kn_k_out 50\
 	--kn_k 50
 ```
 A few additional notes:
