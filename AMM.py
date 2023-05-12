@@ -360,15 +360,19 @@ if __name__ == '__main__':
 		    set_n = len(pd.read_csv(args.out + set_name + ".txt", header = None))
 		    results = {}
 		    for trait in ss_list_enrichment['ss_name']:
-		        tauA = pd.read_csv(args.out + set_name + ".imputed_pk." + args.control_name + "." + trait + ".part_delete", header = None, sep = " ")
-		        tauA_array = tauA[0]
+		        check_file = os.path.isfile(args.out + set_name + ".imputed_pk." + args.control_name + "." + trait + ".part_delete")
+			if check_file == FALSE:
+				continue
+			if check_file == TRUE:
+				tauA = pd.read_csv(args.out + set_name + ".imputed_pk." + args.control_name + "." + trait + ".part_delete", header = None, sep = " ")
+		        	tauA_array = tauA[0]
 		        
-		        tau0 = tauA.iloc[:,1:]
-        		tau0.columns = range(tau0.shape[1])
-        		tau0_array = (tau0.dot(m_files_sum_across_chr))/m_files_sum_across_chr[0]
+		        	tau0 = tauA.iloc[:,1:]
+        			tau0.columns = range(tau0.shape[1])
+        			tau0_array = (tau0.dot(m_files_sum_across_chr))/m_files_sum_across_chr[0]
 		
-		        results[trait] = enrichment_parameters(jk_enrichment(tau0_array, tauA_array, args.n_genes_total, set_n), args.n_jk, trait, set_name, set_n, args.n_genes_total)
+		        	results[trait] = enrichment_parameters(jk_enrichment(tau0_array, tauA_array, args.n_genes_total, set_n), args.n_jk, trait, set_name, set_n, args.n_genes_total)
     
-		    pd.concat(results, axis=0).sort_values(by = 'Enrichment_z', ascending = False).to_csv(args.out + set_name + "." + args.control_name + ".enrichment", header = True, index = None, sep = " ")
+		    	pd.concat(results, axis=0).sort_values(by = 'Enrichment_z', ascending = False).to_csv(args.out + set_name + "." + args.control_name + ".enrichment", header = True, index = None, sep = " ")
     
 		print('Completed module 8: AMM enrichment')
