@@ -5,6 +5,7 @@ import pandas as pd
 import sys
 import os
 import argparse 
+import os.path
 
 #Parse arguments
 parser = argparse.ArgumentParser()
@@ -361,9 +362,9 @@ if __name__ == '__main__':
 		    results = {}
 		    for trait in ss_list_enrichment['ss_name']:
 		        check_file = os.path.isfile(args.out + set_name + ".imputed_pk." + args.control_name + "." + trait + ".part_delete")
-			if check_file == FALSE:
+			if check_file == False:
 				continue
-			if check_file == TRUE:
+			if check_file == True:
 				tauA = pd.read_csv(args.out + set_name + ".imputed_pk." + args.control_name + "." + trait + ".part_delete", header = None, sep = " ")
 		        	tauA_array = tauA[0]
 		        
